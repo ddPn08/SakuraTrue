@@ -1,0 +1,11 @@
+show-code: |
+  This server requires Discord authentication.
+  Send the code below to the specified channel on Discord.
+  <aqua>%verify-code%
+wrong-code: |
+  Wrong code entered
+success-verify: |
+  Verification successful
+re-authenticate-requested: |
+  Re-authentication requested.
+  Please reconnect and authenticate.

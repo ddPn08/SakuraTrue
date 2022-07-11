@@ -1,0 +1,6 @@
+{
+    "java.configuration.updateBuildConfiguration": "interactive",
+    "yaml.schemas": {
+        "https://json.schemastore.org/github-workflow.json": "file:///e%3A/data/code/github/ddPn08/minecraft-captcha/.github/workflows/build.yml"
+    }
+}
