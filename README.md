@@ -3,7 +3,7 @@
 > このプラグインは開発中です
 
 # SakuraTrue🌸
-Minecraft Plugin for Paper that authenticates users using Discord.
+Minecraft Plugin for Paper that authenticates users using Discord.  
 Discordを使用してユーザーを認証するMinecraftプラグイン。
 
 
