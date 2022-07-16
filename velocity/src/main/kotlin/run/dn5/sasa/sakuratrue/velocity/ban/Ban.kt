@@ -10,7 +10,7 @@ class Ban {
     val dataStore = BanDataStore()
 
     fun enable() {
-        this.registerListeners()
+        registerListeners()
         listOf(
             Ban(),
             Pardon()

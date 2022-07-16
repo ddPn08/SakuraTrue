@@ -13,12 +13,12 @@ class BanDataStore {
     private val banDataList = mutableListOf<BanData>()
 
     init {
-        this.load()
+        load()
         saveData()
     }
 
     fun ban(player: Player, reason: String, expires: Long) {
-        this.banDataList.add(
+        banDataList.add(
             BanData(
                 player.username,
                 player.uniqueId.toString(),
@@ -26,18 +26,18 @@ class BanDataStore {
                 expires
             )
         )
-        this.saveData()
+        saveData()
     }
 
     fun pardon(uuid: String) {
-        this.banDataList.removeIf { it.uuid == uuid }
-        this.saveData()
+        banDataList.removeIf { it.uuid == uuid }
+        saveData()
     }
 
-    fun list() = this.banDataList
+    fun list() = banDataList
 
     fun isBanned(player: Player): Boolean {
-        val banData = this.banDataList.firstOrNull { it.uuid == player.uniqueId.toString() } ?: return false
+        val banData = banDataList.firstOrNull { it.uuid == player.uniqueId.toString() } ?: return false
         if (banData.expires == 0L) return true
         if (banData.expires < System.currentTimeMillis()) {
             pardon(player.uniqueId.toString())
@@ -47,7 +47,7 @@ class BanDataStore {
     }
 
     fun getBanData(player: Player): BanData? {
-        return this.banDataList.firstOrNull { it.uuid == player.uniqueId.toString() }
+        return banDataList.firstOrNull { it.uuid == player.uniqueId.toString() }
     }
 
     private fun saveData() {
@@ -60,10 +60,13 @@ class BanDataStore {
 
     private fun load() {
         val file = File("${plugin.dataFolder}/bans.yml")
-        if (!file.exists()) return
+        if (!file.exists()) {
+            file.createNewFile()
+            return
+        }
         val data = Yaml.default.decodeFromStream(BanDataList.serializer(), file.inputStream())
-        this.banDataList.clear()
-        this.banDataList.addAll(data.bans)
+        banDataList.clear()
+        banDataList.addAll(data.bans)
     }
 
     @Serializable

@@ -13,10 +13,10 @@ class Discord {
 
 
     fun enable() {
+        plugin.command.addSubCommand(DiscordCommand())
         registerListeners()
         setupDiscordClient()
         discordAuthStore.load()
-        plugin.command.addSubCommand(DiscordCommand())
     }
 
     fun disable() {

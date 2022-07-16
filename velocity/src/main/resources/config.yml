@@ -1,4 +1,4 @@
-verifier: discord # "discord" or "none"
+verifier: noe # "discord" or "none"
 discord:
   token: "" # Discord Bot Token
   guildId: "" # Discord server id

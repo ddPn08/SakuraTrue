@@ -36,18 +36,19 @@ class VelocityPlugin @Inject constructor(
 
     val command = SakuraTrueCommand()
 
-    val messages = Messages()
+    lateinit var messages: Messages
 
-    val discord = Discord()
-    val ban = Ban()
+    lateinit var discord: Discord
+    lateinit var ban: Ban
 
     @Subscribe
     fun onEnable(e: ProxyInitializeEvent) {
         checkResources()
-        if (!checkConfiguration()) {
-            logger.error("config.yml is invalid. Rewrite it and then execute '/sakuratrue reload' .")
-            return
-        }
+
+        messages = Messages()
+        discord = Discord()
+        ban = Ban()
+
         load()
     }
 
@@ -63,7 +64,7 @@ class VelocityPlugin @Inject constructor(
         when (config.verifier) {
             "discord" -> discord.enable()
         }
-        this.ban.enable()
+        ban.enable()
 
         proxy.commandManager.register(BrigadierCommand(command.build()))
     }
@@ -72,15 +73,9 @@ class VelocityPlugin @Inject constructor(
         discord.disable()
     }
 
-    private fun checkConfiguration(): Boolean {
-        val config = getConfig()
-        return config.discord.token.isNotEmpty() && config.discord.guildId.isNotEmpty()
-    }
-
     private fun checkResources() {
         if (!dataFolder.toFile().exists()) dataFolder.toFile().mkdir()
         listOf(
-            "auth.yml",
             "config.yml",
             "messages.yml"
         ).forEach {
