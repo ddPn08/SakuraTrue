@@ -3,12 +3,13 @@
 > このプラグインは開発中です
 
 # SakuraTrue🌸
-Minecraft Plugin for Paper that authenticates users using Discord.  
-Discordを使用してユーザーを認証するMinecraftプラグイン。
+Minecraft authentication plugin.  
+Minecraftの認証プラグイン。
 
 
 # Configuration
 ```yaml
+verifier: discord # "discord" or "none"
 discord:
   token: "" # Discord Bot Token
   guildId: "" # Discord server id
@@ -19,6 +20,5 @@ discord:
   addRole: # Whether to add roles when confirming the user.
     enabled: false
     roles:
-      - "000000000000000000"
-
+      - "000000000000000000" # Role id
 ```
