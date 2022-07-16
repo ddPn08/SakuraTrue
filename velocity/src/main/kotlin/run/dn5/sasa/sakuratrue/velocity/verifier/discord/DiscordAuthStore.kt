@@ -1,4 +1,4 @@
-package run.dn5.sasa.sakuratrue.velocity
+package run.dn5.sasa.sakuratrue.velocity.verifier.discord
 
 import com.charleskorn.kaml.Yaml
 import com.velocitypowered.api.proxy.Player
@@ -8,43 +8,44 @@ import run.dn5.sasa.sakuratrue.VelocityPlugin
 import java.io.File
 import java.util.*
 
-class AuthStore(
-    private val plugin: VelocityPlugin
-) {
+class DiscordAuthStore {
+    private val plugin = VelocityPlugin.instance
     private val storage = AuthStorage(mutableListOf())
 
     fun verified(name: String): Boolean = storage.auths.firstOrNull { it.username == name }?.verified ?: false
     fun verified(uuid: UUID): Boolean = storage.auths.firstOrNull { it.uuid == uuid.toString() }?.verified ?: false
     fun verify(uuid: UUID, username: String, member: Member) {
-        if (this.verified(uuid)) return
-        this.storage.auths.add(AuthData(username, uuid.toString(), true, member.id))
-        this.save()
+        if (verified(uuid)) return
+        storage.auths.add(AuthData(username, uuid.toString(), true, member.id))
+        save()
     }
 
     fun reauth(username: String) {
-        if (!this.verified(username)) return
-        this.storage.auths.removeIf { it.username == username }
-        this.save()
+        if (!verified(username)) return
+        storage.auths.removeIf { it.username == username }
+        save()
     }
 
     fun checkUsername(player: Player) {
-        val data = this.storage.auths.firstOrNull { it.uuid == player.uniqueId.toString() } ?: return
+        val data = storage.auths.firstOrNull { it.uuid == player.uniqueId.toString() } ?: return
         if (data.username == player.username) return
-        this.storage.auths.removeIf { it.uuid == player.uniqueId.toString() }
-        this.storage.auths.add(AuthData(player.username, player.uniqueId.toString(), data.verified, data.discordUserId))
+        storage.auths.removeIf { it.uuid == player.uniqueId.toString() }
+        storage.auths.add(AuthData(player.username, player.uniqueId.toString(), data.verified, data.discordUserId))
     }
 
     fun load() {
-        val file = File("${this.plugin.dataFolder}/auth.yml")
+        val dir = File("${plugin.dataFolder}/discord")
+        if (!dir.exists()) dir.mkdirs()
+        val file = File("${plugin.dataFolder}/discord/auth.yml")
         if (file.exists()) {
             val loaded = Yaml.default.decodeFromStream(AuthStorage.serializer(), file.inputStream())
-            this.storage.auths.clear()
-            this.storage.auths.addAll(loaded.auths)
+            storage.auths.clear()
+            storage.auths.addAll(loaded.auths)
         }
     }
 
     private fun save() {
-        val file = File("${this.plugin.dataFolder}/auth.yml")
+        val file = File("${plugin.dataFolder}/discord/auth.yml")
         Yaml.default.encodeToStream(AuthStorage.serializer(), storage, file.outputStream())
     }
 

@@ -7,7 +7,7 @@ plugins {
 
 group = "run.dn5.sasa"
 version = "1.0-beta.1"
-description = "Plugin to authenticate users using Discord."
+description = "Minecraft authentication plugin."
 val artifactName = "${rootProject.name}-${rootProject.version}.jar"
 
 repositories {

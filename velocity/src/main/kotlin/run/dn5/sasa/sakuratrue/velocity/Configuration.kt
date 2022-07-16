@@ -4,6 +4,7 @@ import kotlinx.serialization.Serializable
 
 @Serializable
 data class Configuration(
+    val verifier: String,
     val discord: Discord
 ) {
     @Serializable

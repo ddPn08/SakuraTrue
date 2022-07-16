@@ -1,16 +1,16 @@
-package run.dn5.sasa.sakuratrue.velocity.listeners.discord
+package run.dn5.sasa.sakuratrue.velocity.verifier.discord.listeners.discord
 
 import net.dv8tion.jda.api.events.interaction.command.SlashCommandInteractionEvent
 import net.dv8tion.jda.api.hooks.ListenerAdapter
 import run.dn5.sasa.sakuratrue.velocity.Messages
 import run.dn5.sasa.sakuratrue.VelocityPlugin
 
-class SlashCommandInteractionListener(
-    private val plugin: VelocityPlugin
-) : ListenerAdapter() {
+class SlashCommandInteractionListener : ListenerAdapter() {
+    private val plugin = VelocityPlugin.instance
+
     override fun onSlashCommandInteraction(e: SlashCommandInteractionEvent) {
         when (e.subcommandName) {
-            "verify" -> this.verify(e)
+            "verify" -> verify(e)
         }
     }
 
@@ -26,15 +26,15 @@ class SlashCommandInteractionListener(
         val code = e.options.find { it.name == "code" }?.asString ?: return
 
 
-        val messages = this.plugin.messages
+        val messages = plugin.messages
 
-        val session = this.plugin.codeStore.getSession(username)
+        val session = plugin.discord.codeStore.getSession(username)
         if (session?.code != code) {
-            e.reply(messages.getMessage(Messages.MessageKey.WRONG_CODE)).setEphemeral(true).queue()
+            e.reply(messages.getMessage(Messages.MessageKey.DISCORD_WRONG_CODE)).setEphemeral(true).queue()
             return
         }
 
-        this.plugin.authStore.verify(session.uuid, session.username, member)
+        plugin.discord.discordAuthStore.verify(session.uuid, session.username, member)
 
         if (config.discord.changeNickName) {
             try {
@@ -57,6 +57,6 @@ class SlashCommandInteractionListener(
             }
 
         }
-        e.reply(messages.getMessage(Messages.MessageKey.SUCCESS_VERIFY)).setEphemeral(true).queue()
+        e.reply(messages.getMessage(Messages.MessageKey.DISCORD_SUCCESS_VERIFY)).setEphemeral(true).queue()
     }
 }

@@ -6,5 +6,5 @@
     "${author}"
   ],
   "dependencies": [],
-  "main": "run.dn5.sasa.sakuratrue.VelocityPlugin"
+  "main": "${group}.${id}.VelocityPlugin"
 }

@@ -8,18 +8,17 @@ import run.dn5.sasa.sakuratrue.VelocityPlugin
 import java.io.File
 
 class Messages(
-    private val plugin: VelocityPlugin
 ) {
-
+    private val plugin = VelocityPlugin.instance
     private fun getMessages(): YamlMap =
-        Yaml.default.parseToYamlNode(File("${this.plugin.dataFolder}/messages.yml").inputStream()).yamlMap
+        Yaml.default.parseToYamlNode(File("${plugin.dataFolder}/messages.yml").inputStream()).yamlMap
 
     fun getMessage(key: MessageKey): String {
-        return this.getMessages().get<YamlScalar>(key.key)?.yamlScalar?.content ?: return ""
+        return getMessages().get<YamlScalar>(key.key)?.yamlScalar?.content ?: return ""
     }
 
     fun getMessage(key: MessageKey, placeholder: PlaceHolderData): String {
-        var str = this.getMessage(key)
+        var str = getMessage(key)
         if (placeholder.player != null) {
             str = str.replace("%player%", placeholder.player!!.username)
                 .replace("%uuid%", placeholder.player!!.uniqueId.toString())
@@ -31,7 +30,7 @@ class Messages(
     }
 
     fun getMessageComponent(key: MessageKey): Component {
-        val lines = this.getMessage(key).split("\n")
+        val lines = getMessage(key).split("\n")
         val mm = MiniMessage.miniMessage()
         val result = Component.text()
         for (line in lines) {
@@ -41,7 +40,7 @@ class Messages(
     }
 
     fun getMessageComponent(key: MessageKey, placeholder: PlaceHolderData): Component {
-        val lines = this.getMessage(key, placeholder).split("\n")
+        val lines = getMessage(key, placeholder).split("\n")
         val mm = MiniMessage.miniMessage()
         val result = Component.text()
         for (line in lines) {
@@ -56,9 +55,9 @@ class Messages(
     )
 
     enum class MessageKey(val key: String) {
-        SHOW_CODE("show-code"),
-        WRONG_CODE("wrong-code"),
-        SUCCESS_VERIFY("success-verify"),
-        RE_AUTHENTICATE_REQUESTED("re-authenticate-requested"),
+        DISCORD_SHOW_CODE("discord-show-code"),
+        DISCORD_WRONG_CODE("discord-wrong-code"),
+        DISCORD_SUCCESS_VERIFY("discord-success-verify"),
+        DISCORD_RE_AUTHENTICATE_REQUESTED("discord-re-authenticate-requested"),
     }
 }
