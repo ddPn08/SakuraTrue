@@ -6,7 +6,7 @@ plugins {
 }
 
 group = "run.dn5.sasa"
-version = "1.0-beta.1"
+version = "1.0-beta.2"
 description = "Minecraft authentication plugin."
 val artifactName = "${rootProject.name}-${rootProject.version}.jar"
 
