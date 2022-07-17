@@ -25,10 +25,12 @@ class SakuraTrueCommand : LiteralArgumentBuilder<CommandSource>("sakuratrue") {
         """.trimIndent()
     )
 
-    private val subCommands = mutableListOf<LiteralArgumentBuilder<CommandSource>>(
-    )
+    private val subCommands = mutableListOf<LiteralArgumentBuilder<CommandSource>>()
 
     override fun build(): LiteralCommandNode<CommandSource> {
+        requires {
+            it.hasPermission("sakuratrue.command.sakuratrue")
+        }
         subCommands.addAll(listOf(
             literal<CommandSource?>("help").executes { context ->
                 context.source.sendMessage(usage)
